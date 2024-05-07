@@ -5,14 +5,17 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float runSpeed = 10f; // tốc độ di chuyển 
-    [SerializeField] float jumpSpeed = 20f; // tốc độ nhảy
+    [SerializeField] float jumpSpeed = 12f; // tốc độ nhảy
     Vector2 moveInput; // hướng di chuyển x,y
     Rigidbody2D myRigidbody; // khai báo đối tượng Rigid của unity
 
     Animator myAnimator;
 
+    CapsuleCollider2D myCapsule2d;
+
     void Start()
     {
+        myCapsule2d = GetComponent<CapsuleCollider2D>();
         myAnimator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>(); // sử dụng component của Rigidbody
     }
@@ -29,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump(InputValue value)
     {
+        if (!myCapsule2d.IsTouchingLayers(LayerMask.GetMask("Ground"))) { return; }
         if (value.isPressed)
         {
             myRigidbody.velocity += new Vector2(0f, jumpSpeed);
