@@ -1,5 +1,5 @@
 {
-    "name": "Input System",
+    "name": "TileVania",
     "maps": [
         {
             "name": "Player",
@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "1d73ff67-dece-4c6c-9f41-4d60ee0b8f68",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -34,12 +34,12 @@
                 },
                 {
                     "name": "Jump",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "32ef10ee-b5b8-4eae-bf3f-acf8438f742c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -270,6 +270,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d17abaf-ea0b-410e-8ade-7106cdfc43c6",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
