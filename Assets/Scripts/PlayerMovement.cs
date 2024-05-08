@@ -6,24 +6,28 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float runSpeed = 10f; // tốc độ di chuyển 
     [SerializeField] float jumpSpeed = 12f; // tốc độ nhảy
+    [SerializeField] float climbSpeed = 5f; // tốc độ leo 
     Vector2 moveInput; // hướng di chuyển x,y
     Rigidbody2D myRigidbody; // khai báo đối tượng Rigid của unity
 
     Animator myAnimator;
 
     CapsuleCollider2D myCapsule2d;
+    float myGravicityScaleStart;
 
     void Start()
     {
         myCapsule2d = GetComponent<CapsuleCollider2D>();
         myAnimator = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>(); // sử dụng component của Rigidbody
+        myGravicityScaleStart = myRigidbody.gravityScale;
     }
 
     void Update()
     {
         Run();
         FlipSprite();
+        ClimbLadder();
     }
     void OnMove(InputValue value)
     {
@@ -45,8 +49,24 @@ public class PlayerMovement : MonoBehaviour
         myRigidbody.velocity = playerVelocity;
 
         bool playerHasHorizontalSpeed = Mathf.Abs(myRigidbody.velocity.x) > Mathf.Epsilon;
-        Debug.Log(playerHasHorizontalSpeed);
         myAnimator.SetBool("IsRunning", playerHasHorizontalSpeed);
+    }
+    void ClimbLadder()
+    {
+        if (!myCapsule2d.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        {
+            myRigidbody.gravityScale = myGravicityScaleStart;
+            myAnimator.SetBool("IsClimbing", false);
+            return;
+        }
+
+        myRigidbody.gravityScale = 0f;
+
+        Vector2 playerVelocity = new Vector2(myRigidbody.velocity.x, moveInput.y * climbSpeed);
+        myRigidbody.velocity = playerVelocity;
+
+        bool playerHasHorizontalSpeed = Mathf.Abs(myRigidbody.velocity.y) > Mathf.Epsilon;
+        myAnimator.SetBool("IsClimbing", playerHasHorizontalSpeed);
     }
     void FlipSprite()
     {
