@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D myRigidbody; // khai báo đối tượng Rigid của unity
 
     Animator myAnimator;
-
+    BoxCollider2D myFoot;
     CapsuleCollider2D myCapsule2d;
     float myGravicityScaleStart;
 
@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     {
         myCapsule2d = GetComponent<CapsuleCollider2D>();
         myAnimator = GetComponent<Animator>();
+        myFoot = GetComponent<BoxCollider2D>();
         myRigidbody = GetComponent<Rigidbody2D>(); // sử dụng component của Rigidbody
         myGravicityScaleStart = myRigidbody.gravityScale;
     }
@@ -36,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (!myCapsule2d.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (!myFoot.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             return;
         }
