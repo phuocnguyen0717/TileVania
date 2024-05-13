@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float runSpeed = 10f; // tốc độ di chuyển 
     [SerializeField] float jumpSpeed = 12f; // tốc độ nhảy
     [SerializeField] float climbSpeed = 5f; // tốc độ leo 
+    [SerializeField] Vector2 deathKick = new Vector2(20f, 20f);
     Vector2 moveInput; // hướng di chuyển x,y
     Rigidbody2D myRigidbody; // khai báo đối tượng Rigid của unity
 
@@ -14,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     BoxCollider2D myFoot;
     CapsuleCollider2D myCapsule2d;
     float myGravicityScaleStart;
-
+    bool isAlive = true;
     void Start()
     {
         myCapsule2d = GetComponent<CapsuleCollider2D>();
@@ -26,17 +27,23 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive) { return; }
         Run();
         FlipSprite();
         ClimbLadder();
+        Die();
     }
     void OnMove(InputValue value)
     {
+        if (!isAlive) { return; }
+
         moveInput = value.Get<Vector2>();
     }
 
     void OnJump(InputValue value)
     {
+        if (!isAlive) { return; }
+
         if (!myFoot.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             return;
@@ -48,6 +55,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void Run()
     {
+        if (!isAlive) { return; }
+
         // giữ nguyên trục y, trục x sẽ thay đổi theo runSpeed cho người dùng thiết lập
         Vector2 playerVelocity = new Vector2(moveInput.x * runSpeed, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;
@@ -81,6 +90,15 @@ public class PlayerMovement : MonoBehaviour
         {
             // nhân vật quay trái(-1)/phải(1)
             transform.localScale = new Vector2(Mathf.Sign(myRigidbody.velocity.x), 1f);
+        }
+    }
+    void Die()
+    {
+        if (myCapsule2d.IsTouchingLayers(LayerMask.GetMask("Enemies", "Trap")))
+        {
+            isAlive = false;
+            myAnimator.SetTrigger("Dying");
+            myRigidbody.velocity = deathKick;
         }
     }
 }
