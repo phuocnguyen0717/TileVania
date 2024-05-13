@@ -16,8 +16,8 @@ TagManager:
   - Player
   - Background
   - Boucing
-  - 
-  - 
+  - Enemies
+  - Trap
   - 
   - 
   - 
@@ -55,6 +55,12 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 3239836971
+    locked: 0
+  - name: Trap
+    uniqueID: 1908996891
+    locked: 0
+  - name: Enemies
+    uniqueID: 153970555
     locked: 0
   - name: Player
     uniqueID: 3811423099
