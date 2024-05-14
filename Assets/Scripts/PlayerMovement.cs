@@ -8,12 +8,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpSpeed = 12f; // tốc độ nhảy
     [SerializeField] float climbSpeed = 5f; // tốc độ leo 
     [SerializeField] Vector2 deathKick = new Vector2(20f, 20f);
+    [SerializeField] GameObject bullet;
+    [SerializeField] Transform gun;
     Vector2 moveInput; // hướng di chuyển x,y
     Rigidbody2D myRigidbody; // khai báo đối tượng Rigid của unity
 
     Animator myAnimator;
     BoxCollider2D myFoot;
     CapsuleCollider2D myCapsule2d;
+
     float myGravicityScaleStart;
     bool isAlive = true;
     void Start()
@@ -52,6 +55,11 @@ public class PlayerMovement : MonoBehaviour
         {
             myRigidbody.velocity += new Vector2(0f, jumpSpeed);
         }
+    }
+    void OnFire(InputValue value)
+    {
+        if (!isAlive) { return; }
+        Instantiate(bullet, gun.position, transform.rotation);
     }
     void Run()
     {
@@ -100,5 +108,6 @@ public class PlayerMovement : MonoBehaviour
             myAnimator.SetTrigger("Dying");
             myRigidbody.velocity = deathKick;
         }
+        FindObjectOfType<GameSession>().ProcessPlayerDeath();
     }
 }
